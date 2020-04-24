@@ -36,11 +36,11 @@ class CandleStickHandler(Resource):
             ts = None
         if ts:
             nq = text(
-                "select price as p, quantity as q, ts as T, symbol as s, is_market as m from tradeData where ts>:ts")
+                "select price as p, quantity as q, ts as T, symbol as s, is_market as m from tradeData where ts>:ts order by id desc")
             nr = normalised_response(db.engine.execute(nq, ({'ts': str(ts)})))
         else:
             nq = text(
-                "select price as p, quantity as q, ts as T, symbol as s, is_market as m from tradeData")
+                "select price as p, quantity as q, ts as T, symbol as s, is_market as m from tradeData order by id desc")
             nr = normalised_response(db.engine.execute(nq))
         if not nr:
             resp['status'] = 0
