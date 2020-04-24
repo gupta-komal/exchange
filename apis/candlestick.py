@@ -17,9 +17,8 @@ class CandleStickHandler(Resource):
          accepts the timeline value from query param though the default is current day
         :return:
         """
-        resp = {"status": 0, "desc": ""}
+        resp = {"status": 1, "desc": ""}
         tl = request.args.get("tl")
-        print(tl)
         today = DT.datetime.today()
         ts = (today - DT.timedelta(days=1)).timestamp()
         if tl and tl.upper() == '1W':
@@ -43,6 +42,8 @@ class CandleStickHandler(Resource):
             nq = text(
                 "select price as p, quantity as q, ts as T, symbol as s, is_market as m from tradeData")
             nr = normalised_response(db.engine.execute(nq))
-
+        if not nr:
+            resp['status'] = 0
+            resp['desc'] = 'No Data Found'
         resp ['data'] = nr
         return resp
